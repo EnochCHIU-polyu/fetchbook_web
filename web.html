@@ -8,9 +8,13 @@
     </style>
 </head>
 <body>
-    <h1>小說內容</h1>
-    <div>
-        <!-- 這裡放合併後的小說內容 -->
-    </div>
+  <div id="novel-content">載入中...</div>
+  <script>
+    fetch('display.txt')
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById('novel-content').innerHTML = text.replace(/\n/g, '<br>');
+      });
+  </script>
 </body>
 </html>

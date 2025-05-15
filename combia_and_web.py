@@ -7,6 +7,10 @@ for fname in files:
     with open(os.path.join(folder, fname), encoding="utf-8") as f:
         content += f.read() + "\n\n"
 
+# 儲存純文字到 display.txt
+with open("display.txt", "w", encoding="utf-8") as f:
+    f.write(content)
+
 html = f"""<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -26,4 +30,4 @@ html = f"""<!DOCTYPE html>
 with open("web.html", "w", encoding="utf-8") as f:
     f.write(html)
 
-print("已產生 web.html")
+print("已產生 web.html 與 display.txt")
