@@ -1,35 +1,29 @@
 import os
-from flask import Flask, render_template_string
 
-app = Flask(__name__)
+folder = "page"
+files = sorted([f for f in os.listdir(folder) if f.endswith('.txt')])
+content = ""
+for fname in files:
+    with open(os.path.join(folder, fname), encoding="utf-8") as f:
+        content += f.read() + "\n\n"
 
-def combine_txt_files(folder):
-    files = sorted([f for f in os.listdir(folder) if f.endswith('.txt')])
-    content = ""
-    for fname in files:
-        with open(os.path.join(folder, fname), encoding="utf-8") as f:
-            content += f.read() + "\n\n"
-    return content
+html = f"""<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>小說合併展示</title>
+    <style>
+        body {{ font-family: "Noto Sans TC", "微軟正黑體", sans-serif; white-space: pre-wrap; }}
+    </style>
+</head>
+<body>
+    <h1>小說內容</h1>
+    <div>{content.replace('\n', '<br>')}</div>
+</body>
+</html>
+"""
 
-@app.route("/")
-def index():
-    content = combine_txt_files("page")
-    # 用簡單的 HTML 顯示內容
-    return render_template_string("""
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title>小說合併展示</title>
-        <style>
-            body { font-family: "Noto Sans TC", "微軟正黑體", sans-serif; white-space: pre-wrap; }
-        </style>
-    </head>
-    <body>
-        <h1>小說內容</h1>
-        <div>{{ content }}</div>
-    </body>
-    </html>
-    """, content=content)
+with open("web.html", "w", encoding="utf-8") as f:
+    f.write(html)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+print("已產生 web.html")
